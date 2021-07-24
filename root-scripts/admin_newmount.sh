@@ -33,14 +33,13 @@ do
   ds=`echo $ds | sed "s/'//g"`
   echo "processing disk $ds"
   dd if=/dev/zero of=/dev/$ds bs=1M count=100
-  mkfs.xfs -s size=512 -b size=4096  /dev/$ds
-#  mkfs.xfs -s size=512 -b size=4096 -m bigtime=1 /dev/$ds
+  mkfs.ext4 /dev/$ds
   NEW_UUID=`blkid -o list /dev/$ds |grep 'not mounted' | awk '{ print $5}'`
   if [[ $NEW_UUID != '' ]]
   then
     mkdir /home/chia/farm/$NEW_UUID
     chown chia:chia /home/chia/farm/$NEW_UUID
-    echo "UUID=\"$NEW_UUID\" /home/chia/farm/$NEW_UUID xfs noatime,nofail 0 0" >> /etc/fstab
+    echo "UUID=\"$NEW_UUID\" /home/chia/farm/$NEW_UUID ext4 noatime,nofail 0 0" >> /etc/fstab
     mount /dev/$ds
   fi
 done
