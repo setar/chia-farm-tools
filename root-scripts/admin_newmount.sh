@@ -5,7 +5,7 @@ systemctl daemon-reload
 systemctl reset-failed
 mount -a
 
-SYS_DSK=`lsblk |grep -B 2 boot |grep disk | awk '{print "\x27"$1"\x27"}'`
+SYS_DSK=`lsblk |grep -E -B 3 "/$" |grep disk | awk '{print "\x27"$1"\x27"}'`
 RAID_DSK=`lsblk |grep -B 1 /home/chia/temp|grep disk | awk '{print "\x27"$1"\x27"}'`
 MOUNTED_DSK=`blkid -o list |grep dev |grep -v 'not mounted' |egrep -v 'use|nvme|boot|device|mapper|/dev/md' |awk '{print "\x27"$1"\x27"}' | sed 's/\/dev\///'`
 
