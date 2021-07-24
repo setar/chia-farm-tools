@@ -4,21 +4,22 @@
 # script for moving ready chia plots
 # Make moves finished plots from multiple sources to multiple destination directories with location control during the move.
 # Can use multiple source hosts with one destination server without interfering with each other (space reservation)
-# TODO : now script use single forked move procces in one time, may be need many threads ?
 #=================================================================================================================
 #  Start Config data
 #-----------------------------------------------------------------------------------------------------------------
 SRC_DIRS='/home/chia/temp' # may be multiple via space
-DST_ROOT='/home/chia/farm' # single folder
+DST_ROOT='/home/chia/farm' # root farm folder, single dir
 STOP_DIRS="$DST_ROOT$|chia/temp" # egrep
-DEBUG=true
+MAX_COUNT=4 # maximum count of move process
+DST_COUNT=1 # count move process to one destination folder
+DEBUG=false # true for debug mode
 # SRC_DIRS : source directories for monitoring *.plot files
 # DST_ROOT : is root folder for mount many single disks
 # example
-# DST_ROOT='/home/chia/nfs'
-# /home/chia/nfs/4TB_1 : first mounted disk
-# /home/chia/nfs/4TB_2 : second mounted disk
-# /home/chia/nfs/16TB_other : trind mounted disk
+# DST_ROOT='/home/chia/farm'
+# /home/chia/farm/4TB_1 : first mounted disk
+# /home/chia/farm/4TB_2 : second mounted disk
+# /home/chia/farm/16TB_other : trind mounted disk
 # ... etc
 # STOP_DIRS is exclude from destination folder list
 # DEBUG : false / true
@@ -29,13 +30,9 @@ DEBUG=true
 #-----------------------------------------------------------------------------------------------------------------
 #  End Config data
 #=================================================================================================================
-
-
-
 [[ ! -a /bin/zsh ]] && echo "This script need ZSH shell" #|| echo "Start script"
-
 dt=$(date '+%d.%m.%Y %H:%M:%S');
-dst_found=false # признак найденного назначения 
+count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
 [[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"
 for dir in ${=SRC_DIRS}
 do # перебор исходных каталогов
@@ -44,53 +41,60 @@ do # перебор исходных каталогов
   do # перебор готовых плотов
     filename=$src:t # возьмем имя файла из полного имени
     [[  $DEBUG == "true" ]] && echo "\n    Source:$src , len=$slen"
-    [[  $DEBUG == "true" ]] && echo "\n      Destination search:"
+    [[  $DEBUG == "true" ]] && echo "      Destination search:"
     # зайдем в каждыйкаталог для вложенного nfs монтирования
-    for dirs in `find $DST_ROOT -type d` ; do cd $dirs ; done
-    # посмотрим место в каталогах назначения
+    # for dirs in `find $DST_ROOT -type d` ; do cd $dirs ; done
+    # поищем место в каталогах назначения
+    dst_found=false # признак найденного назначения
+    in_move=false # признак того что плот уже перемещается
     for dlen dst in `df |grep -E $DST_ROOT|grep -v -E $STOP_DIRS | awk '{ print $4,$6}'`
     do # перебор каталогов назначения
-      if [[  $dst_found = "false"  ]]
+      dst_count=0 # процессов копирования в каталог назначения
+      if [[  ( $dst_found = "false" && $in_move = "false" ) ]]
       then
-        [[  $DEBUG == "true" ]] && echo "      $dst, raw free $dlen"
+        [[  $DEBUG == "true" ]] && echo "      check $dst, raw free $dlen"
         free=$dlen
+        spacesize=0
         for spacefile in `find "$dst" -type f -name "*.space" -print0`
         do # проверка сколько места зарезервировано (объем резерва в файле имя_плота.space)
           if [[ ( $spacefile != '' && $spacefile != '\n' ) ]]
           then
             space_filename=${spacefile%.space}
             space_filename=$space_filename:t
-            [[  $DEBUG == "true" ]] && echo "space_filename=$space_filename"
+            [[  $DEBUG == "true" ]] && echo "          space_filename=$space_filename"
+            (( dst_count = dst_count + 1 ))
             if [[ "$space_filename" = "$filename" ]]
             then # этот файл уже в обработке
-              echo "$dt Plot $filename is already in moving"
-              return 0
-            fi
-            spacesize=`cat "$spacefile"`
-            [[  $DEBUG == "true" ]] && echo "      reserved:$spacesize for ${spacefile%.space}"
+              [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving"
+              in_move=true
+            else
+            (( spacesize = spacesize + `cat "$spacefile"` ))
+            [[  $DEBUG == "true" ]] && echo "          reserved for file ${spacefile%.space} SUM reserved:$spacesize "
             (( free = free - $spacesize ))
-          else
+            fi
+          else 
             spacesize=0
           fi
-        done
-        [[  $DEBUG == "true" ]] && echo "      Free:$free"
-        if [ $free -gt $slen  ]
-        then # место позволяет сохраниться
-            [[  $DEBUG == "true" ]] && echo "      copy to hier ($slen < $free)"
+        done 
+        [[  $DEBUG == "true" ]] && echo "          Free=$free"
+        if [[ ( $free -gt $slen  && $in_move = "false" && $dst_count -lt $DST_COUNT ) ]]
+        then # место позволяет сохраниться и плот еще не копируется и число процессов на назначение еще не превышено
+            [[  $DEBUG == "true" ]] && echo "          space found ($slen < $free)"
             dst_found=true
+            echo "\n$dt Start new move:"
+            echo "mv $src $dst/$filename"
             echo "$slen" > $dst/$filename.space
-            echo "$dt Start new move:"
-            echo "mv $src $dst/$filename && rm -f $dst/$filename.space &"
             `mv $src $dst/$filename.mover && mv $dst/$filename.mover $dst/$filename && rm -f $dst/$filename.space ` &
             cd /home/chia/chia-blockchain/
             . ./activate
             chia plots add -d "$dst"
-            return 0
+           [[ $count -gt $MAX_COUNT ]] && return 0 # выход из скрипта по достижению максимального кол-ва потоков
+           (( count = count + 1 ))
         else # места для сохранения нет
-          [[  $DEBUG == "true" ]] && echo "      low space($free < $slen)"
+#          [[  $DEBUG == "true" ]] && echo "          low space($free < $slen)"
         fi
       else
-#        echo "      dst already found"
+#        echo "      dst already found or plot in move"
       fi
     done
   done
