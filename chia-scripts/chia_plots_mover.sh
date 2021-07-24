@@ -79,6 +79,7 @@ do # перебор исходных каталогов
         [[  $DEBUG == "true" ]] && echo "          Free=$free"
         if [[ ( $free -gt $slen  && $in_move = "false" && $dst_count -lt $DST_COUNT ) ]]
         then # место позволяет сохраниться и плот еще не копируется и число процессов на назначение еще не превышено
+            [[ $count -gt $MAX_COUNT ]] && exit 0 # выход из скрипта по достижению максимального кол-ва потоков
             [[  $DEBUG == "true" ]] && echo "          space found ($slen < $free)"
             dst_found=true
             echo "\n$dt Start new move:"
@@ -88,8 +89,7 @@ do # перебор исходных каталогов
             cd /home/chia/chia-blockchain/
             . ./activate
             chia plots add -d "$dst"
-           [[ $count -gt $MAX_COUNT ]] && return 0 # выход из скрипта по достижению максимального кол-ва потоков
-           (( count = count + 1 ))
+            (( count = count + 1 ))
         else # места для сохранения нет
 #          [[  $DEBUG == "true" ]] && echo "          low space($free < $slen)"
         fi
