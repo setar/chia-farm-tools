@@ -19,5 +19,5 @@ defscrollback 10000
 chown chia:chia /home/chia/.screenrc
 
 mkdir -p /home/chia/chia-scripts
-chown chia:chia /home/chia/chia-scripts
 cp -Rv chia-scripts/* /home/chia/chia-scripts/
+chown -R chia:chia /home/chia/chia-scripts
