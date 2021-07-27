@@ -28,3 +28,4 @@ cp chia-scripts/mm_create_nft.sh /home/chia/mm_create_nft.sh
 cp chia-scripts/chia_cli.sh /home/chia/chia_cli.sh
 cp chia-scripts/chia_mover.sh /home/chia/chia_mover.sh
 cp chia-scripts/chia_summary.sh /home/chia/chia_summary.sh
+cp chia-scripts/chia_plots_validator.sh /home/chia/chia_plots_validator.sh
