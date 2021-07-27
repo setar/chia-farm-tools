@@ -90,7 +90,7 @@ do # перебор исходных каталогов
             cd /home/chia/chia-blockchain/
             . ./activate
             chia plots add -d "$dst"
-            (( count = count + 1 ))
+           (( count = count + 1 ))
         else # места для сохранения нет
 #          [[  $DEBUG == "true" ]] && echo "          low space($free < $slen)"
         fi
