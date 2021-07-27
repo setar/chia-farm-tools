@@ -1,11 +1,11 @@
 #!/bin/bash
-cp root-scripts/chia_bb /usr/local/sbin/chia_bb
-cp root-scripts/chia_log /usr/local/sbin/chia_log
-cp root-scripts/chia_mover /usr/local/sbin/chia_mover
-cp root-scripts/chia_swar /usr/local/sbin/chia_swar
-cp root-scripts/chia_cli /usr/local/sbin/chia_cli
-cp root-scripts/chia_log2 /usr/local/sbin/chia_log2
-cp root-scripts/chia_summary /usr/local/sbin/chia_summary
+sudo cp root-scripts/chia_bb /usr/local/sbin/chia_bb
+sudo cp root-scripts/chia_log /usr/local/sbin/chia_log
+sudo cp root-scripts/chia_mover /usr/local/sbin/chia_mover
+sudo cp root-scripts/chia_swar /usr/local/sbin/chia_swar
+sudo cp root-scripts/chia_cli /usr/local/sbin/chia_cli
+sudo cp root-scripts/chia_log2 /usr/local/sbin/chia_log2
+sudo cp root-scripts/chia_summary /usr/local/sbin/chia_summary
 
 echo "hardstatus alwayslastline
 hardstatus string '%{gk}[ %{G}%H %{g}][%{= kw}%-w%{= BW}%n %t%{-}%+w][%= %{=b kR}(%{W} %h%?(%u)%?%{=b kR} )%{= kw}%=][%{Y}%l%{g}]%{=b C}[ %d.%m.%Y %c:%s ]%{W}'
