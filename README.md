@@ -23,6 +23,7 @@ chia_mover # show plots mover log in screen (w/o full_node info)
 chia_bb # execute bladebit plotter in screen
 chia_swar # execute swar plotter in screen
 chia_summary # show summary info in screen
+chia_plots_validator # check and remove multiple plots (by logs of chia farmer), find and delete lost part of plots move
 ```
 ## root admin scripts
 ```
