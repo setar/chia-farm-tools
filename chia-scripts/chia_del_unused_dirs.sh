@@ -1,6 +1,5 @@
 #!/bin/bash
-cd /home/chia/chia-blockchain/
-. ./activate
+(cd /home/chia/chia-blockchain/; . ./activate)
 #chia show -s
 
 
