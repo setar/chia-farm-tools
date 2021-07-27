@@ -1,4 +1,5 @@
 #!/bin/bash
+(cd ~/chia-scripts; . ./activate)
 ( cd /home/chia/chia-blockchain/ ; . ./activate )
 
 echo "Remove multiple copy of plots:"

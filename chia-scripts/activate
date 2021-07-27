@@ -12,8 +12,15 @@ echo "Chia user = $USER"
 HOME=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep home | sed "s/home=//"`
 echo "Chia user homedir = $HOME"
 
+TEMP=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep temp | sed "s/temp=//"`
+echo "Chia user tempdir = $TEMP"
+
+RAM=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram | sed "s/ram=//"`
+echo "Chia user ramdir = $RAM"
 
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
 export CHIA_USER=$USER
 export CHIA_HOME=$HOME
+export CHIA_TEMP=$TEMP
+export CHIA_RAM=$RAM

@@ -2,7 +2,7 @@
 MARKER='chia_mover'
 FOUND=`screen -ls | grep $MARKER | wc -l`
 CMD1='su - chia\n'
-CMD2='/home/chia/chia_mover.sh\n'
+CMD2='~/chia-scripts/chia_mover.sh\n'
 [[ $FOUND == "0" ]] && (screen -dmS $MARKER && screen -S $MARKER -X stuff "$CMD1" && screen -S $MARKER -X stuff "$CMD2" && screen -x $MARKER) ||  screen -x $MARKER
 
 

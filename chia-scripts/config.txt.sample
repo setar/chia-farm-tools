@@ -4,6 +4,12 @@ user = chia
 # user home dir
 home = /home/chia
 
+# temp dir (with mounted NVMe)
+temp = /home/chia/temp 
+
+# temp2 dir (with mounted RAM Drive)
+ram = /home/chia/ram
+
 # farmer public key, from 'chia keys show'
 fpk = 88cbed9eb6b92d75f4073c65ca231e81f4a95057f4b9c5461997170e71adcbebe2a0eacbba2a0153ec936cfbe2f32e8f
 
