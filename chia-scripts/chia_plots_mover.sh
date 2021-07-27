@@ -37,7 +37,7 @@ count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # numbe
 for dir in ${=SRC_DIRS}
 do # перебор исходных каталогов
   [[  $DEBUG == "true" ]] && echo "\n  Search in $dir:"
-  for slen src in `find "$dir" -type f -name "*.plot" -print0 | du --files0-from=-`
+  for slen src in `find "$dir" -type f -name "*.plot" -printf '%s\t%p\n'`
   do # перебор готовых плотов
     filename=$src:t # возьмем имя файла из полного имени
     [[  $DEBUG == "true" ]] && echo "\n    Source:$src , len=$slen"
@@ -52,6 +52,7 @@ do # перебор исходных каталогов
       dst_count=0 # процессов копирования в каталог назначения
       if [[  ( $dst_found = "false" && $in_move = "false" ) ]]
       then
+        (( dlen = dlen * 1024 ))
         [[  $DEBUG == "true" ]] && echo "      check $dst, raw free $dlen"
         free=$dlen
         spacesize=0
