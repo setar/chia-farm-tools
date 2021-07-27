@@ -85,7 +85,7 @@ do # перебор исходных каталогов
             echo "\n$dt Start new move:"
             echo "mv $src $dst/$filename"
             echo "$slen" > $dst/$filename.space
-            `mv $src $dst/$filename.mover && mv $dst/$filename.mover $dst/$filename && rm -f $dst/$filename.space ` &
+            `(mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space)` &
             cd /home/chia/chia-blockchain/
             . ./activate
             chia plots add -d "$dst"
