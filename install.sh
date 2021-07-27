@@ -1,4 +1,14 @@
 #!/bin/bash
+if [ ! -f chia-scripts/config.txt ]
+then
+echo "Config File NOT FOUND."
+echo "please copy sample end edit it:"
+echo "cp chia-scripts/config.txt.sample chia-scripts/config.txt"
+echo "vi chia-scripts/config.txt"
+exit 0
+fi
+
+(cd /home/chia/chia-blockchain/; . ./activate)
 sudo cp root-scripts/chia_bb /usr/local/sbin/chia_bb
 sudo cp root-scripts/chia_log /usr/local/sbin/chia_log
 sudo cp root-scripts/chia_mover /usr/local/sbin/chia_mover
