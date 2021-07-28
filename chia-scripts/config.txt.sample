@@ -1,8 +1,8 @@
 # farmer/plotter user
 user = chia
 
-# user home dir
-home = /home/chia
+# farm dir (mount dir for multiple drives)
+farm = /home/chia/farm
 
 # temp dir (with mounted NVMe)
 temp = /home/chia/temp 

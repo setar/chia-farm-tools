@@ -15,8 +15,12 @@ echo "Chia user tempdir = $TEMP"
 RAM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram | sed "s/ram=//"`
 echo "Chia user ramdir = $RAM"
 
+FARM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep farm | sed "s/farm=//"`
+echo "Chia Farm dir = $FARM"
+
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
 export CHIA_USER=$USER
 export CHIA_TEMP=$TEMP
 export CHIA_RAM=$RAM
+export CHIA_FARM=$FARM

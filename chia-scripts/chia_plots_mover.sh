@@ -1,4 +1,5 @@
 #!/bin/zsh
+. ~/chia-scripts/activate # chia-frm-tools env
 #=================================================================================================================
 # 05.2021 Sergey Taranenko aka setar@roboforum.ru
 # script for moving ready chia plots
@@ -8,7 +9,8 @@
 #  Start Config data
 #-----------------------------------------------------------------------------------------------------------------
 SRC_DIRS='/home/chia/temp' # may be multiple via space
-DST_ROOT='/home/chia/farm' # root farm folder, single dir
+#DST_ROOT='/home/chia/farm' # root farm folder, single dir
+DST_ROOT="$CHIA_FARM" # root farm folder, single dir
 STOP_DIRS="$DST_ROOT$|chia/temp" # egrep
 MAX_COUNT=4 # maximum count of move process
 DST_COUNT=1 # count move process to one destination folder
@@ -33,7 +35,7 @@ DEBUG=false # true for debug mode
 [[ ! -a /bin/zsh ]] && echo "This script need ZSH shell" #|| echo "Start script"
 dt=$(date '+%d.%m.%Y %H:%M:%S');
 
-. ~/chia-scripts/activate
+
 
 count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
 [[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"
