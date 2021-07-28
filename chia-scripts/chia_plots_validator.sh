@@ -1,6 +1,6 @@
 #!/bin/bash
-(cd ~/chia-scripts; . ./activate)
-( cd /home/chia/chia-blockchain/ ; . ./activate )
+. ~/chia-scripts/activate
+. ~/chia-blockchain/activate
 
 echo "Remove multiple copy of plots:"
 MULT_COPY=`cat /home/chia/.chia/mainnet/log/debug.log | grep 'multiple copies of the plot' | sed  "s/^.*\(\/home\/chia\/farm\/.*\.plot\).*$/\1/p" | sort | uniq`

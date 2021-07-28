@@ -1,6 +1,6 @@
 #!/bin/bash
-(cd ~/chia-scripts; . ./activate)
-(cd /home/chia/chia-blockchain/;. ./activate)
+. ~/chia-scripts/activate
+. ~/chia-blockchain/activate
 echo "Farmer Publc Key = $FPK"
 echo "Pool Contract Address = $NFT"
 echo "Chia user = $USER"

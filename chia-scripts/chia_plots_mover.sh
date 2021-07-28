@@ -33,7 +33,7 @@ DEBUG=false # true for debug mode
 [[ ! -a /bin/zsh ]] && echo "This script need ZSH shell" #|| echo "Start script"
 dt=$(date '+%d.%m.%Y %H:%M:%S');
 
-(cd ~/chia-scripts; . ./activate)
+. ~/chia-scripts/activate
 
 count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
 [[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"

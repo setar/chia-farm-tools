@@ -1,26 +1,22 @@
 #!/bin/bash
 
-FPK=`cat config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep fpk | sed "s/fpk=//"`
+FPK=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep fpk | sed "s/fpk=//"`
 echo "Farmer Publc Key = $FPK"
 
-NFT=`cat config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep nft | sed "s/nft=//"`
+NFT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep nft | sed "s/nft=//"`
 echo "Pool Contract Address = $NFT"
 
-USER=`cat config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep user | sed "s/user=//"`
+USER=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep user | sed "s/user=//"`
 echo "Chia user = $USER"
 
-HOME=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep home | sed "s/home=//"`
-echo "Chia user homedir = $HOME"
-
-TEMP=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep temp | sed "s/temp=//"`
+TEMP=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep temp | sed "s/temp=//"`
 echo "Chia user tempdir = $TEMP"
 
-RAM=`cat config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram | sed "s/ram=//"`
+RAM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram | sed "s/ram=//"`
 echo "Chia user ramdir = $RAM"
 
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
 export CHIA_USER=$USER
-export CHIA_HOME=$HOME
 export CHIA_TEMP=$TEMP
 export CHIA_RAM=$RAM
