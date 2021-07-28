@@ -8,8 +8,7 @@
 #=================================================================================================================
 #  Start Config data
 #-----------------------------------------------------------------------------------------------------------------
-SRC_DIRS='/home/chia/temp' # may be multiple via space
-#DST_ROOT='/home/chia/farm' # root farm folder, single dir
+SRC_DIRS="$CHIA_TEMP" # may be multiple via space
 DST_ROOT="$CHIA_FARM" # root farm folder, single dir
 STOP_DIRS="$DST_ROOT$|chia/temp" # egrep
 MAX_COUNT=4 # maximum count of move process
@@ -28,14 +27,12 @@ DEBUG=false # true for debug mode
 #
 # set to crontab (edit script place and log):
 # $ crontab -e
-# * * * * * /home/chia/chia_plots_mover.sh >>/home/chia/plots_mover.log
+# * * * * * /home/chia/chia-scripts/chia_plots_mover.sh >>/home/chia/logs/plots_mover.log
 #-----------------------------------------------------------------------------------------------------------------
 #  End Config data
 #=================================================================================================================
 [[ ! -a /bin/zsh ]] && echo "This script need ZSH shell" #|| echo "Start script"
 dt=$(date '+%d.%m.%Y %H:%M:%S');
-
-
 
 count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
 [[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"

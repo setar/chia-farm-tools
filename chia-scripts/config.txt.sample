@@ -15,3 +15,6 @@ fpk = 88cbed9eb6b92d75f4073c65ca231e81f4a95057f4b9c5461997170e71adcbebe2a0eacbba
 
 # pool contract address
 nft = xch18kspvxwzth2ssyup97qc642unxe0k2fljkrkslzmvxu3zqfja88sqwzghg
+
+# num of threads for one job
+threads = 4
