@@ -18,3 +18,13 @@ nft = xch18kspvxwzth2ssyup97qc642unxe0k2fljkrkslzmvxu3zqfja88sqwzghg
 
 # num of threads for one job
 threads = 4
+
+# enable debug mode 
+debug = false
+
+# maximum count of move process
+max_count = 4
+
+# count move process to one destination folder (single drive)
+dst_count = 1
+

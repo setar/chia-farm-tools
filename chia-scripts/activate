@@ -21,6 +21,15 @@ echo "Chia Farm dir = $FARM"
 THREADS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep threads | sed "s/threads=//"`
 echo "Chia # of threads = $THREADS"
 
+DEBUG=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep debug | sed "s/debug=//"`
+echo "Chia debug mode = $DEBUG"
+
+MAX_COUNT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep max_count | sed "s/max_count=//"`
+echo "Chia maximum process of move = $MAX_COUNT"
+
+DST_COUNT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep dst_count | sed "s/dst_count=//"`
+echo "Chia maximum move to one device = $DST_COUNT"
+
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
 export CHIA_USER=$USER
@@ -28,3 +37,6 @@ export CHIA_TEMP=$TEMP
 export CHIA_RAM=$RAM
 export CHIA_FARM=$FARM
 export CHIA_THREADS=$THREADS
+export CHIA_DEBUG=$DEBUG
+export CHIA_MAX_COUNT=$MAX_COUNT
+export CHIA_DST_COUNT=$DST_COUNT

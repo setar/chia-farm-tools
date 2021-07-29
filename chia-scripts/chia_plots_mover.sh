@@ -11,9 +11,9 @@
 SRC_DIRS="$CHIA_TEMP" # may be multiple via space
 DST_ROOT="$CHIA_FARM" # root farm folder, single dir
 STOP_DIRS="$DST_ROOT$|chia/temp" # egrep
-MAX_COUNT=4 # maximum count of move process
-DST_COUNT=1 # count move process to one destination folder
-DEBUG=false # true for debug mode
+MAX_COUNT=$CHIA_MAX_COUNT # maximum count of move process
+DST_COUNT=$CHIA_DST_COUNT # count move process to one destination folder
+DEBUG=$CHIA_DEBUG # true for debug mode
 # SRC_DIRS : source directories for monitoring *.plot files
 # DST_ROOT : is root folder for mount many single disks
 # example
