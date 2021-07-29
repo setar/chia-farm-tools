@@ -82,7 +82,7 @@ do # перебор исходных каталогов
         [[  $DEBUG == "true" ]] && echo "          Free=$free"
         if [[ ( $free -gt $slen  && $in_move = "false" && $dst_count -lt $DST_COUNT ) ]]
         then # место позволяет сохраниться и плот еще не копируется и число процессов на назначение еще не превышено
-            [[ $count -gt $MAX_COUNT ]] && exit 0 # выход из скрипта по достижению максимального кол-ва потоков
+            [[ $count -ge $MAX_COUNT ]] && exit 0 # выход из скрипта по достижению максимального кол-ва потоков
             [[  $DEBUG == "true" ]] && echo "          space found ($slen < $free)"
             dst_found=true
             echo "\n$dt Start new move:"
