@@ -4,6 +4,6 @@
 chia start farmer
 chia show -a introducer-eu.chia.net:8444
 
-#cd /home/chia/Swar-Chia-Plot-Manager
+#cd $HOME/Swar-Chia-Plot-Manager
 #python3 manager.py start
 

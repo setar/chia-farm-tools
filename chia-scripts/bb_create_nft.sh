@@ -3,7 +3,7 @@
 for n in {1..999};
 do
 echo "  ########################## PLOT $n  #######################################"
-/home/chia/bladebit/.bin/release/bladebit -n 1 -t 56 -v -f 88cbed9eb6b92d75f4073c65ca231e81f4a95057f4b9c5461997170e71adcbebe2a0eacbba2a0153ec936cfbe2f32e8f -c xch18kspvxwzth2ssyup97qc642unxe0k2fljkrkslzmvxu3zqfja88sqwzghg /home/chia/temp/
+$HOME/bladebit/.bin/release/bladebit -n 1 -t $CHIA_THREADS -v -f $CHIA_FPK -c $CHIA_NFT $CHIA_TEMP/
 
 #bladebit [<OPTIONS>] [<out_dir>]
 #
@@ -40,6 +40,6 @@ echo "  ########################## PLOT $n  ####################################
 #                        If you set this parameter in a NUMA system you
 #                        will likely get degraded performance.
 
-`/home/chia/chia_plots_mover.sh 2>&1 >> /home/chia/logs/plots_mover.bb.log ` &
+`$HOME/chia-scripts/chia_plots_mover.sh 2>&1 >> $HOME/logs/plots_mover.bb.log ` &
 done
 

@@ -3,7 +3,7 @@
 . ~/chia-blockchain/activate
 #chia show -s
 
-FARM=`ls -ld /home/chia/farm/* | awk '{print $9}'`
+FARM=`ls -ld $CHIA_FARM/* | awk '{print $9}'`
 
 for dr in $FARM
 do
