@@ -3,7 +3,7 @@
 . ~/chia-blockchain/activate
 
 echo "Remove multiple copy of plots:"
-MULT_COPY=`cat /home/chia/.chia/mainnet/log/debug.log | grep 'multiple copies of the plot' | sed  "s/^.*\(\/home\/chia\/farm\/.*\.plot\).*$/\1/p" | sort | uniq`
+MULT_COPY=`cat $HOME/.chia/mainnet/log/debug.log | grep 'multiple copies of the plot' | sed  "s/^.*\($FARM\/.*\.plot\).*$/\1/p" | sort | uniq`
 
 for fn in $MULT_COPY
 do
@@ -13,11 +13,11 @@ done
 rm -f space_files
 touch space_files
 echo "Search space reserved for plots"
-SPACE_FILES=`(cd /home/chia/farm ; find . -name '*.space' -type f -mmin +60 -print  | sed 's/.\///')` # maxtime for copy = 60 min ( -mmin +60 )
+SPACE_FILES=`(cd $FARM ; find . -name '*.space' -type f -mmin +60 -print  | sed 's/.\///')` # maxtime for copy = 60 min ( -mmin +60 )
 for fn in $SPACE_FILES
 do
-#    echo "Space /home/chia/farm/$fn"
-    [[ -f /home/chia/farm/$fn ]] && ( echo "/home/chia/farm/${fn%.space}" >> space_files ;)
+#    echo "Space $FARM/$fn"
+    [[ -f $FARM/$fn ]] && ( echo "$FARM/${fn%.space}" >> space_files ;)
 done
 
 echo "Check used space of  plots"
@@ -47,4 +47,3 @@ done
 
 #chia show -s
 #/bin/bash
-
