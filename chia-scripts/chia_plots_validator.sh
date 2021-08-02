@@ -3,7 +3,7 @@
 . ~/chia-blockchain/activate
 
 echo "Remove multiple copy of plots:"
-FARM_Q=$(echo $FARM | sed 's/\//\\\//g')
+FARM_Q=$(echo $CHIA_FARM | sed 's/\//\\\//g')
 MULT_COPY=`cat $HOME/.chia/mainnet/log/debug.log | grep 'multiple copies of the plot' | sed  "s/^.*\($FARM_Q\/.*\.plot\).*$/\1/p" | sort | uniq`
 
 for fn in $MULT_COPY
