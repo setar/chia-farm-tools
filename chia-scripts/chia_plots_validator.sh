@@ -11,9 +11,9 @@ do
     [[ -f $fn ]] && ( echo "Remove $fn" ; rm -f $fn)
 done
 
+echo "Search space reserved for plots"
 rm -f space_files
 touch space_files
-echo "Search space reserved for plots"
 SPACE_FILES=`(cd $FARM ; find . -name '*.space' -type f -mmin +60 -print  | sed 's/.\///')` # maxtime for copy = 60 min ( -mmin +60 )
 for fn in $SPACE_FILES
 do
@@ -45,6 +45,14 @@ do
           rm -f "$fn.space"
      fi
 done
+
+echo "Search plots with bad size"
+BAD_SIZE=`cat $HOME/.chia/mainnet/log/debug.log |grep -A1 'Error using prover object Src size is incorrect' |grep File |awk '{print $6}'`
+for fn in $BAD_SIZE
+do
+    [[ -f $fn ]] && ( echo "Remove $fn" ; rm -f $fn)
+done
+
 
 #chia show -s
 #/bin/bash
