@@ -75,24 +75,29 @@ do # перебор исходных каталогов
             [[  $DEBUG == "true" ]] && echo "          reserved for file ${spacefile%.space} SUM reserved:$spacesize "
             (( free = free - $spacesize ))
             fi
-          else 
+          else
             spacesize=0
           fi
-        done 
+        done
         [[  $DEBUG == "true" ]] && echo "          Free=$free"
         if [[ ( $free -gt $slen  && $in_move = "false" && $dst_count -lt $DST_COUNT ) ]]
         then # место позволяет сохраниться и плот еще не копируется и число процессов на назначение еще не превышено
             [[ $count -ge $MAX_COUNT ]] && exit 0 # выход из скрипта по достижению максимального кол-ва потоков
             [[  $DEBUG == "true" ]] && echo "          space found ($slen < $free)"
-            dst_found=true
-            echo "\n$dt Start new move:"
-            echo "mv $src $dst/$filename"
             echo "$slen" > $dst/$filename.space
-            `(mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space)` &
-            cd /home/chia/chia-blockchain/
-            . ./activate
-            chia plots add -d "$dst"
-           (( count = count + 1 ))
+            if [[ ! -a $dst/$filename.space ]] # check rw status of dst
+            then # ro dst
+              echo "ERROR: Destination $dst is RO filesystem"
+            else # rw enable
+              echo "\n$dt Start new move:"
+              echo "mv $src $dst/$filename"
+              dst_found=true
+              `(mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space)` &
+              cd /home/chia/chia-blockchain/
+              . ./activate
+              chia plots add -d "$dst"
+             (( count = count + 1 ))
+           fi
         else # места для сохранения нет
 #          [[  $DEBUG == "true" ]] && echo "          low space($free < $slen)"
         fi
