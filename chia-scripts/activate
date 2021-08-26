@@ -30,6 +30,12 @@ echo "Chia maximum process of move = $MAX_COUNT"
 DST_COUNT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep dst_count | sed "s/dst_count=//"`
 echo "Chia maximum move to one device = $DST_COUNT"
 
+ROLE=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep role | sed "s/role=//"`
+echo "Chia role = $ROLE"
+
+NFS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep nfs | sed "s/nfs=//"`
+echo "Chia farme mount by NFS = $NFS"
+
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
 export CHIA_USER=$USER
@@ -40,3 +46,5 @@ export CHIA_THREADS=$THREADS
 export CHIA_DEBUG=$DEBUG
 export CHIA_MAX_COUNT=$MAX_COUNT
 export CHIA_DST_COUNT=$DST_COUNT
+export CHIA_ROLE=$ROLE
+export CHIA_NFS=$NFS

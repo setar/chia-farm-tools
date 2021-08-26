@@ -28,3 +28,8 @@ max_count = 4
 # count move process to one destination folder (single drive)
 dst_count = 1
 
+# role of the node : farmer / harvester
+role = farmer
+
+# farm mount by SAN i.e. nfs (all mount point must be connected before disk free analyze) : false / true
+nfs = false
