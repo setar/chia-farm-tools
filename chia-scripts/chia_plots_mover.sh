@@ -37,7 +37,7 @@ dt=$(date '+%d.%m.%Y %H:%M:%S');
 
 count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
 [[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"
-for dir in ${=SRC_DIRS} do
+for dir in ${=SRC_DIRS} ; do
   # перебор исходных каталогов
   [[  $DEBUG == "true" ]] && echo "\n  Search in $dir:"
   for slen src in `find "$dir" -type f -name "*.plot" -printf '%s\t%p\n'` ; do
@@ -55,22 +55,20 @@ for dir in ${=SRC_DIRS} do
       for dlen dst in `df |grep -E $DST_ROOT|grep -v -E $STOP_DIRS | awk '{ print $4,$6}'` ; do
         # перебор каталогов назначения
         dst_count=0 # процессов копирования в каталог назначения
-        if [[  ( $dst_found = "false" && $in_move = "false" ) ]]
-        then
+        if [[  ( $dst_found = "false" && $in_move = "false" ) ]] then
           (( dlen = dlen * 1024 ))
           [[  $DEBUG == "true" ]] && echo "      check $dst, raw free $dlen"
           free=$dlen
           spacesize=0
           for spacefile in `find "$dst" -type f -name "*.space" -print0` ; do
             # проверка сколько места зарезервировано (объем резерва в файле имя_плота.space)
-            if [[ ( $spacefile != '' && $spacefile != '\n' ) ]]
-            then
+            if [[ ( $spacefile != '' && $spacefile != '\n' ) ]] then
               space_filename=${spacefile%.space}
               space_filename=$space_filename:t
               [[  $DEBUG == "true" ]] && echo "          space_filename=$space_filename"
               (( dst_count = dst_count + 1 ))
-              if [[ "$space_filename" = "$filename" ]]
-              then # этот файл уже в обработке
+              if [[ "$space_filename" = "$filename" ]] then
+                # этот файл уже в обработке
                 [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving"
                 in_move=true
               else
@@ -88,8 +86,9 @@ for dir in ${=SRC_DIRS} do
               [[ $count -ge $MAX_COUNT ]] && exit 0 # выход из скрипта по достижению максимального кол-ва потоков
               [[  $DEBUG == "true" ]] && echo "          space found ($slen < $free)"
               echo "$slen" > $dst/$filename.space
-              if [[ ! -a $dst/$filename.space ]] # check rw status of dst
-              then # ro dst
+              # check rw status of dst
+              if [[ ! -a $dst/$filename.space ]] then
+                # ro dst
                 echo "ERROR: Destination $dst is RO filesystem"
               else # rw enable, start moving process
                 echo "\n$dt Start new move:"
