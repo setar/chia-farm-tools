@@ -15,6 +15,7 @@ MAX_COUNT=$CHIA_MAX_COUNT # maximum count of move process
 DST_COUNT=$CHIA_DST_COUNT # count move process to one destination folder
 DEBUG=$CHIA_DEBUG # true for debug mode
 NFS=$CHIA_NFS # true if farm mounted by nfs
+MAX_TIME=$CHIA_MAX_TIME # maximum time of single move process
 # SRC_DIRS : source directories for monitoring *.plot files
 # DST_ROOT : is root folder for mount many single disks
 # example
@@ -42,9 +43,9 @@ for dir in ${=SRC_DIRS} ; do
   [[  $DEBUG == "true" ]] && echo "\n  Search in $dir:"
   for slen src in `find "$dir" -type f -name "*.plot" -printf '%s\t%p\n'` ; do
     # перебор готовых плотов
+    filename=$src:t # возьмем имя файла из полного имени
     if [[ ! -a $src.inmove ]] then
       # the plot not in move now
-      filename=$src:t # возьмем имя файла из полного имени
       [[  $DEBUG == "true" ]] && echo "\n    Source:$src , len=$slen"
       [[  $DEBUG == "true" ]] && echo "      Destination search:"
       # зайдем в каждый каталог для вложенного nfs монтирования
@@ -110,14 +111,16 @@ for dir in ${=SRC_DIRS} ; do
       done
     else
       # the plot in move process
-      echo "      !!! plot $filename is already in moving, check time :"
       StartDate=$(cat $src.inmove)
       # StartDate="26.08.2021 15:00:00"
       StartSec=$(busybox date -D '%d.%m.%Y %H:%M:%S' -d "$StartDate" +"%s")
       NowSec=$(date +"%s")
       #date -d "0 $NowSec sec - $StartSec sec" +"%H:%M:%S"
       MoveSec=$((NowSec-StartSec))
-      echo $MoveSec
+      [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving, time of process : $MoveSec sec"
+      if [[ $MoveSec -gt $MAX_TIME ]] then
+        echo "time of move proccess of $filename very big, ps myst be killed"
+      fi
     fi
   done
 done

@@ -33,3 +33,6 @@ role = farmer
 
 # farm mount by SAN i.e. nfs (all mount point must be connected before disk free analyze) : false / true
 nfs = false
+
+# Maximum time in seconds for single move process
+time = 1800

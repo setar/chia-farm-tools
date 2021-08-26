@@ -34,7 +34,10 @@ ROLE=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//
 echo "Chia role = $ROLE"
 
 NFS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep nfs | sed "s/nfs=//"`
-echo "Chia farme mount by NFS = $NFS"
+echo "Chia farm mount by NFS = $NFS"
+
+MAX_TIME=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep time | sed "s/time=//"`
+echo "Chia maximum time of single move process = $MAX_TIME sec"
 
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
@@ -48,3 +51,4 @@ export CHIA_MAX_COUNT=$MAX_COUNT
 export CHIA_DST_COUNT=$DST_COUNT
 export CHIA_ROLE=$ROLE
 export CHIA_NFS=$NFS
+export CHIA_MAX_TIME=$MAX_TIME
