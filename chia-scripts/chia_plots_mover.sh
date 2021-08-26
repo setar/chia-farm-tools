@@ -111,7 +111,13 @@ for dir in ${=SRC_DIRS} ; do
     else
       # the plot in move process
       echo "      !!! plot $filename is already in moving, check time :"
-      cat $src.inmove
+      StartDate=$(cat $src.inmove)
+      # StartDate="26.08.2021 15:00:00"
+      StartSec=$(busybox date -D '%d.%m.%Y %H:%M:%S' -d "$StartDate" +"%s")
+      NowSec=$(date +"%s")
+      #date -d "0 $NowSec sec - $StartSec sec" +"%H:%M:%S"
+      MoveSec=$((NowSec-StartSec))
+      echo $MoveSec
     fi
   done
 done
