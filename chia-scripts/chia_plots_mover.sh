@@ -95,8 +95,7 @@ for dir in ${=SRC_DIRS} ; do
                 echo "\n$dt Start new move:"
                 echo "mv $src $dst/$filename"
                 dst_found=true
-                echo "$dt" > $src.inmove
-                `(mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove)` &
+                `(echo "$dt $$ $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove)` &
                 cd /home/chia/chia-blockchain/
                 . ./activate
                 chia plots add -d "$dst"
@@ -110,17 +109,26 @@ for dir in ${=SRC_DIRS} ; do
         fi
       done
     else
-      # the plot in move process
-      StartDate=$(cat $src.inmove)
-      # StartDate="26.08.2021 15:00:00"
-      StartSec=$(busybox date -D '%d.%m.%Y %H:%M:%S' -d "$StartDate" +"%s")
-      NowSec=$(date +"%s")
-      #date -d "0 $NowSec sec - $StartSec sec" +"%H:%M:%S"
-      MoveSec=$((NowSec-StartSec))
-      [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving, time of process : $MoveSec sec"
-      if [[ $MoveSec -gt $MAX_TIME ]] then
-        echo "time of move proccess of $filename very big, ps myst be killed"
-      fi
+#      for t pid in $(cat $src.inmove | awk '{print $1$2\t$3};') ; do
+      for d t pid dstf in $(cat $src.inmove | awk '{printf ("%s\t%s\t%s\t%s\n", $1, $2 , $3 , $4)};') ; do
+        [[  $DEBUG == "true" ]] && echo "Date: $d , Time: $t , pid: $pid , Dst Folder=$dstf"
+        # the plot in move process
+        #StartDate=$(cat $src.inmove)
+        StartDate="$d $t"
+        # StartDate="26.08.2021 15:00:00"
+        StartSec=$(busybox date -D '%d.%m.%Y %H:%M:%S' -d "$StartDate" +"%s")
+        NowSec=$(date +"%s")
+        #date -d "0 $NowSec sec - $StartSec sec" +"%H:%M:%S"
+        MoveSec=$((NowSec-StartSec))
+        [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving, time of process : $MoveSec sec"
+        if [[ $MoveSec -gt $MAX_TIME ]] then
+          echo "      Time of move proccess of $filename very big, ps $pid must be killed"
+          rm -f $src.inmove
+          rm -f $dstf/$filename.mover
+          rm -f $dstf/$filename.space
+          kill -9 $pid
+        fi
+      done
     fi
   done
 done
