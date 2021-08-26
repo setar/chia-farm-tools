@@ -1,43 +1,45 @@
 #!/bin/bash
 
+DEBUG=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep debug= | sed "s/debug=//"`
+[[  $DEBUG == "true" ]] && echo "Chia debug mode = $DEBUG"
+
 FPK=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep fpk | sed "s/fpk=//"`
-echo "Farmer Publc Key = $FPK"
+[[  $DEBUG == "true" ]] && echo "Farmer Publc Key = $FPK"
 
 NFT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep nft | sed "s/nft=//"`
-echo "Pool Contract Address = $NFT"
+[[  $DEBUG == "true" ]] && echo "Pool Contract Address = $NFT"
 
 USER=`cat ~/chia-scripts/config.txt | grep -v '#' | sed "s/ //g;s/'//g;s/\"//g" | grep user= | sed "s/user=//"`
-echo "Chia user = $USER"
+[[  $DEBUG == "true" ]] && echo "Chia user = $USER"
 
 TEMP=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep temp= | sed "s/temp=//"`
-echo "Chia user tempdir = $TEMP"
+[[  $DEBUG == "true" ]] && echo "Chia user tempdir = $TEMP"
 
 RAM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram= | sed "s/ram=//"`
-echo "Chia user ramdir = $RAM"
+[[  $DEBUG == "true" ]] && echo "Chia user ramdir = $RAM"
 
 FARM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep farm= | sed "s/farm=//"`
-echo "Chia Farm dir = $FARM"
+[[  $DEBUG == "true" ]] && echo "Chia Farm dir = $FARM"
 
 THREADS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep threads= | sed "s/threads=//"`
-echo "Chia # of threads = $THREADS"
-
-DEBUG=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep debug= | sed "s/debug=//"`
-echo "Chia debug mode = $DEBUG"
+[[  $DEBUG == "true" ]] && echo "Chia # of threads = $THREADS"
 
 MAX_COUNT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep max_count= | sed "s/max_count=//"`
-echo "Chia maximum process of move = $MAX_COUNT"
+[[  $DEBUG == "true" ]] && echo "Chia maximum process of move = $MAX_COUNT"
 
 DST_COUNT=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep dst_count= | sed "s/dst_count=//"`
-echo "Chia maximum move to one device = $DST_COUNT"
+[[  $DEBUG == "true" ]] && echo "Chia maximum move to one device = $DST_COUNT"
 
 ROLE=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep role= | sed "s/role=//"`
-echo "Chia role = $ROLE"
+[[  $DEBUG == "true" ]] && echo "Chia role = $ROLE"
 
 NFS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep nfs= | sed "s/nfs=//"`
-echo "Chia farm mount by NFS = $NFS"
+[[  $DEBUG == "true" ]] && echo "Chia farm mount by NFS = $NFS"
 
 MAX_TIME=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep time= | sed "s/time=//"`
-echo "Chia maximum time of single move process = $MAX_TIME sec"
+[[  $DEBUG == "true" ]] && echo "Chia maximum time of single move process = $MAX_TIME sec"
+
+[[  $DEBUG == "true" ]] && echo ""
 
 export CHIA_FPK=$FPK
 export CHIA_NFT=$NFT
@@ -52,5 +54,3 @@ export CHIA_DST_COUNT=$DST_COUNT
 export CHIA_ROLE=$ROLE
 export CHIA_NFS=$NFS
 export CHIA_MAX_TIME=$MAX_TIME
-
-echo ""

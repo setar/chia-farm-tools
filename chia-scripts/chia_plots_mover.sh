@@ -37,7 +37,7 @@ MAX_TIME=$CHIA_MAX_TIME # maximum time of single move process
 dt=$(date '+%d.%m.%Y %H:%M:%S');
 
 count=`ps ax | grep -A 1 chia_plots_mover.sh |grep mv |grep plot |wc -l` # number of move process
-[[  $DEBUG == "true" ]] &&echo "$dt Search source Plots"
+[[  $DEBUG == "true" ]] && echo "$dt Search source Plots"
 for dir in ${=SRC_DIRS} ; do
   # перебор исходных каталогов
   [[  $DEBUG == "true" ]] && echo "\n  Search in $dir:"
