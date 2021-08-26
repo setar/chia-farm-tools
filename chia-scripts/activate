@@ -15,7 +15,7 @@ echo "Chia user tempdir = $TEMP"
 RAM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep ram | sed "s/ram=//"`
 echo "Chia user ramdir = $RAM"
 
-FARM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep farm | sed "s/farm=//"`
+FARM=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep farm= | sed "s/farm=//"`
 echo "Chia Farm dir = $FARM"
 
 THREADS=`cat ~/chia-scripts/config.txt | grep -v '#' | sed -e "s/ //g;s/'//g;s/\"//g;s/.*\/$//" | grep threads | sed "s/threads=//"`
@@ -52,3 +52,5 @@ export CHIA_DST_COUNT=$DST_COUNT
 export CHIA_ROLE=$ROLE
 export CHIA_NFS=$NFS
 export CHIA_MAX_TIME=$MAX_TIME
+
+echo ""
