@@ -95,7 +95,8 @@ for dir in ${=SRC_DIRS} ; do
                 echo "\n$dt Start new move:"
                 echo "mv $src $dst/$filename"
                 dst_found=true
-                `(echo "$dt $$ $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove)` &
+                `(echo "$dt $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove)` &
+                echo " $!" >> $src.inmove
                 cd /home/chia/chia-blockchain/
                 . ./activate
                 chia plots add -d "$dst"
@@ -110,8 +111,8 @@ for dir in ${=SRC_DIRS} ; do
       done
     else
 #      for t pid in $(cat $src.inmove | awk '{print $1$2\t$3};') ; do
-      for d t pid dstf in $(cat $src.inmove | awk '{printf ("%s\t%s\t%s\t%s\n", $1, $2 , $3 , $4)};') ; do
-        [[  $DEBUG == "true" ]] && echo "Date: $d , Time: $t , pid: $pid , Dst Folder=$dstf"
+      for d t dstf pid in $(cat $src.inmove | awk '{printf ("%s\t%s\t%s\t%s\n", $1, $2 , $3 , $4)};') ; do
+        [[  $DEBUG == "true" ]] && echo "Date: $d , Time: $t , Dst Folder=$dstf , pid: $pid"
         # the plot in move process
         #StartDate=$(cat $src.inmove)
         StartDate="$d $t"
