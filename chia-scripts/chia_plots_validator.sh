@@ -47,12 +47,18 @@ do
 done
 
 echo "Search plots with bad size"
-BAD_SIZE=`cat $HOME/.chia/mainnet/log/debug.log |grep -A1 'Error using prover object Src size is incorrect' |grep File |awk '{print $6}'`
+BAD_SIZE=`cat $HOME/.chia/mainnet/log/debug.log |grep -A1 'Error using prover object Src size is incorrect' |grep File |awk '{print $6}'|sort|uniq`
 for fn in $BAD_SIZE
 do
     [[ -f $fn ]] && ( echo "Remove $fn" ; rm -f $fn)
 done
 
+echo "Search plots with failbit"
+FAILBIT=`cat $HOME/.chia/mainnet/log/debug.log |grep 'badbit or failbit after reading size' |grep 'Failed to open file'|awk '{print $10}'|sed 's/.$//'|sort|uniq`
+for fn in $FAILBIT
+do
+    [[ -f $fn ]] && ( echo "Remove $fn" ; rm -f $fn)
+done
 
 #chia show -s
 #/bin/bash
