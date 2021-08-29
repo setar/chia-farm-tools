@@ -95,7 +95,7 @@ for dir in ${=SRC_DIRS} ; do
                 echo "\n$dt Start new move:"
                 echo "mv $src $dst/$filename"
                 dst_found=true
-                `(echo "$dt $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove)` &
+                $(echo "$dt $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove) &
                 echo " $!" >> $src.inmove
                 cd /home/chia/chia-blockchain/
                 . ./activate
@@ -124,10 +124,10 @@ for dir in ${=SRC_DIRS} ; do
         [[  $DEBUG == "true" ]] && echo "      !!! plot $filename is already in moving, time of process : $MoveSec sec"
         if [[ $MoveSec -gt $MAX_TIME ]] then
           echo "      Time of move proccess of $filename very big, ps $pid must be killed"
+          kill -9 $pid
           rm -f $src.inmove
           rm -f $dstf/$filename.mover
           rm -f $dstf/$filename.space
-          kill -9 $pid
         fi
       done
     fi
