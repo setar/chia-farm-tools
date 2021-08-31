@@ -1,5 +1,6 @@
 # chia-farm-tools
 Linux scripts for organize big chia plotting and harvesting farm.
+
 [Русскоязычное описание](https://github.com/setar/chia-farm-tools/blob/main/README_RU.md)
 
 # pre requests
