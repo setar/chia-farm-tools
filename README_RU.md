@@ -273,19 +273,7 @@ sh install.sh
 
 chia init
 
-chmod 600 /home/chia/.chia/mainnet/config/ssl/ca/private_ca.key
-
-chmod 600 /home/chia/.chia/mainnet/config/ssl/daemon/private_daemon.key
-
-chmod 644 /home/chia/.chia/mainnet/config/ssl/ca/private_ca.crt
-
-chmod 644 /home/chia/.chia/mainnet/config/ssl/daemon/private_daemon.crt
-
-chmod 644 /home/chia/.chia/mainnet/config/ssl/farmer/private_farmer.crt
-
-chmod 600 /home/chia/.chia/mainnet/config/ssl/farmer/private_farmer.key
-
-chmod 644 /home/chia/chia-blockchain/mozilla-ca/cacert.pem
+chia init --fix-ssl-permissions
 
 chia keys add
 ```
@@ -376,3 +364,137 @@ crontab -e
 @reboot sh /home/chia/chia-scripts/chia_startup.sh
 * * * * * /home/chia/chia-scripts/chia_plots_mover.sh >>/home/chia/logs/plots_mover.log
 ```
+
+# Эксплуатация комплекса 
+
+## запуск MadMax plotter
+окно #1
+
+screen -S mm
+
+su - chia
+
+. ~/chia-blockchain/activate
+
+~/chia-scripts/mm_create_nft.sh
+
+## окно #2
+screen -S mm2
+
+su - chia
+
+. ~/chia-blockchain/activate
+
+~/chia-scripts/mm_create_nft.sh
+
+автоматическое перемещение готовых плотов:
+В планировщике пользователя chia  запущен ежеминутный процесс контроля за новыми файлами типа *.plot в каталоге /home/chia/temp
+при появлении таковых скрипт резервирует место на первом свободном диске и запускает процесс перемещения готового плота.
+Сам скрипт находится /home/chia/chia-scripts/chia_plots_mover.sh
+Лог работы расположен /home/chia/logs/plots_mover.log
+
+быстрые скрипты из комплекта chia-farm-tools для автоматизации контроля и обслуживания
+```
+скрин (screen) - автономно запущенная консоль, от которой можно отцепиться и прицепиться заново с того же места даже после обрыва связи
+признаком нахождения в скрине является нижний статус бар с средней загрузкой системы, датой и временем:
+[ chia ][0 bash][                                                  (  )                                                  ][2.43 2.04 2.09][ 26.06.2021  9:14:27 ]
+
+выход из скрина (отцепиться ) :  Ctrl+a , d (две клавиши, затем их отпустить и сразу одну клавишу)
+закрыть скрин (удалить/убить): несколько раз последовательно Ctrl+d   до пропадания статус бара (обычно там 3 вложенные консоли)
+```
+запуск быстрых скринов (из под консоли root):
+chia_cli - выдаст текущую статистику и запустит консоль chia для выполнения команд
+chia_log - полный детальный лог (прервать Ctrl+c но можно просто отцепиться)
+chia_log2 - лог с фильтром по текущим проверкам плотов (включая скорость этого процесса, норма до 2 сек, до 5 можно но плохо)
+chia_summary - общая информация по ферме
+chia_mm , chia_mm2 - мониторинг плоттинг подсистемы (MadMax)
+chia_mover - лог скрипта перемещения готовых плотов (прервать Ctrl+c но можно просто отцепиться)
+
+
+полезные команды для консоли chia_cli
+```
+текущее состояние 
+chia show -s
+
+сколько коннектов с миром 
+chia show -c
+
+информация о плотах
+chia plots show
+
+проверка плотов n=кол-во тестов по умолчатию 30, выше будет более долгая и точная проверка.
+chia plots check -n 1
+
+результат последних тестов на "вырастание выигрыша"
+chia farm challenges
+
+разные фильтры по логам
+tail -f /home/chia/.chia/mainnet/log/debug.log |grep full_node 
+tail -f /home/chia/.chia/mainnet/log/debug.log |grep chia.harvester.harvester
+
+показать кошелек (с сектерной фразой)
+chia keys show --show-mnemonic-seed
+
+проверка качества плотов (без удаления), рационально вывод перенаправлять в файл  
+~/chia-scripts/chia_plots_QC.sh  > QC.txt
+
+проверка и чистка дисков от повторяющихся плотов а так же не завершенных процедур перемещания
+~/chia-scripts/chia_plots_validator.sh 
+
+чистка из системы и процесса фермера каталогов от удаленных фисков
+~/chia-scripts/chia_del_unused_dirs.sh 
+
+```
+
+---
+
+вспомогательные админские скрипты: Используем крайне вдумчиво!
+доступны только для рута
+- создание темп диска 
+		1. рескан дисков (актуально если новые вставлены)
+			- rescan-scsi-bus
+		2. идентифицируем NVMe например по размеру
+			- lsblk
+			- 
+			- тут sdb , sdc, sdd
+			- или 
+			- lsblk |grep nvme  # тут запоминаем букву диска например nvme0n1 (или несколько)
+		3. правим скрипт создания указывая темп диски и их кол-во
+			- mcedit /root/scripts/admin_mktemp.sh
+			- 
+		4. запускаем скрипт
+			- /root/scripts/admin_mktemp.sh
+		5. проверяем что темп подцепился :
+			- df -h /home/chia/temp
+			- 
+
+- подключение новых дисков для плотов
+	1. физически вставить диски
+	2. запустить скрипт  /root/chia-farm-tools/root-scripts/admin_newmount.sh
+		- будет произведен рескан шины, и попытка подключить все диски исключая системный и темп
+		- диски которые уже подключены - будут игнорированы
+		- новые будут подключены и поставлены в автостарт
+		- "грязные диски" (с имеющейся файловой системой) - будут почищены, поэтому запуск ручной
+
+---
+Перевод машин в режим harvester-only
+
+Поднимается виртуалка main, настройка аналогично обычным машинам (без насройки nvme и дисков)
+c машины main на харвестеры копируется каталог  /home/chia/.chia/mainnet/config/ssl/ca/*
+
+на харвест машинах
+chia_cli
+ssh 192.168.2.230 "(cd /home/chia/.chia/mainnet/config/ssl/ca ; tar cjf - ./*)" | (mkdir -p /home/chia/ca.ssl; cd /home/chia/ca.ssl; cat | tar xj )
+chia stop all -d
+chia init -c /home/chia/ca.ssl
+mcedit /home/chia/.chia/mainnet/config/config.yaml
+```
+harvester:
+  chia_ssl_ca:
+    crt: config/ssl/ca/chia_ca.crt
+    key: config/ssl/ca/chia_ca.key
+  farmer_peer:
+    host: 192.168.2.230
+    port: 8447
+```
+chia start harvester
