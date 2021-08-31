@@ -1,13 +1,72 @@
 # chia-farm-tools
 Linux scripts for organize big chia plotting and harvesting farm.
 
+# pre requests
+* zsh
+* worked ntpd # highly recomended
+* installed and configured chia environment 
+  * adduser chia
+  * usermod -aG sudo chia
+  * mkdir /home/chia/temp
+  * chown chia:chia /home/chia/temp
+  * mkdir /home/chia/farm
+  * chown chia:chia /home/chia/farm
+  * mkdir /home/chia/ram
+  * chown chia:chia /home/chia/ram
+  * mkdir /home/chia/logs
+  * chown chia:chia /home/chia/logs
+  * mount -o size=220G -t tmpfs none /home/chia/temp/ # if used madmax plotter (110GB for every ploting process )
+  * nano /etc/fstab # if used madmax plotter
+  * add new mount point "tmpfs		/home/chia/ram	tmpfs	rw,noatime,nosuid,size=220G	0 0"
+  * echo "hardstatus alwayslastline
+hardstatus string '%{gk}[ %{G}%H %{g}][%{= kw}%-w%{= BW}%n %t%{-}%+w][%= %{=b kR}(%{W} %h%?(%u)%?%{=b kR} )%{= kw}%=][%{Y}%l%{g}]%{=b C}[ %d.%m.%Y %c:%s ]%{W}'
+defscrollback 10000
+"  > ~/.screenrc
+  * echo "hardstatus alwayslastline
+hardstatus string '%{gk}[ %{G}%H %{g}][%{= kw}%-w%{= BW}%n %t%{-}%+w][%= %{=b kR}(%{W} %h%?(%u)%?%{=b kR} )%{= kw}%=][%{Y}%l%{g}]%{=b C}[ %d.%m.%Y %c:%s ]%{W}'
+defscrollback 10000
+"  > /home/chia/.screenrc
+  * chown chia:chia /home/chia/.screenrc
+
 # install
 ```
+sudo -i
+cd ~
 git clone https://github.com/setar/chia-farm-tools.git
 cd chia-farmer-tools
 cp chia-scripts/config.txt.sample chia-scripts/config.txt
 nano chia-scripts/config.txt # set you parameters hier
 install.sh
+```
+
+# install chia (only for example)
+```
+chia_cli
+cd ~
+git clone https://github.com/Chia-Network/chia-blockchain.git -b main --recurse-submodules
+cd chia-blockchain
+chmod +x ./install.sh
+sh install.sh
+. ./activate
+chia init
+chia keys add # yuo secrets words hier
+chia keys show
+chia start farmer
+chia show -a introducer-eu.chia.net:8444
+chia configure -upnp false
+chia configure --log-level INFO
+chia start farmer -r
+Ctrl+A,d
+
+chia_log
+```
+
+# cron jobs
+chia_cli
+crontab -e
+```
+@reboot sh /home/chia/chia-scripts/chia_startup.sh
+* * * * * /home/chia/chia-scripts/chia_plots_mover.sh >>/home/chia/logs/plots_mover.log
 ```
 
 # use
