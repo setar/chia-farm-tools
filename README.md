@@ -5,6 +5,8 @@ Linux scripts for organize big chia plotting and harvesting farm.
 ```
 git clone https://github.com/setar/chia-farm-tools.git
 cd chia-farmer-tools
+cp chia-scripts/config.txt.sample chia-scripts/config.txt
+nano chia-scripts/config.txt # set you parameters hier
 install.sh
 ```
 
