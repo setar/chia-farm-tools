@@ -369,6 +369,8 @@ git submodule update --init
 ./make_devel.sh
 
 ## автозапуск кошелька и фермера (без  процессов плоттера)
+chia_cli
+
 crontab -e
 ```
 @reboot sh /home/chia/chia-scripts/chia_startup.sh
