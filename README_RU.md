@@ -369,18 +369,6 @@ git submodule update --init
 ./make_devel.sh
 
 ## автозапуск кошелька и фермера (без  процессов плоттера)
-mcedit /home/chia/chia-scripts/chia_startup.sh
-```
-#!/bin/bash
-. ~/chia-scripts/activate
-. ~/chia-blockchain/activate
-chia start farmer
-chia show -a introducer-eu.chia.net:8444
-#cd $HOME/Swar-Chia-Plot-Manager
-#python3 manager.py start
-```
-chmod +x /home/chia/chia-scripts/chia_startup.sh
-
 crontab -e
 ```
 @reboot sh /home/chia/chia-scripts/chia_startup.sh
