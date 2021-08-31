@@ -95,8 +95,7 @@ for dir in ${=SRC_DIRS} ; do
                 echo "\n$dt Start new move:"
                 echo "mv $src $dst/$filename"
                 dst_found=true
-                $(echo "$dt $dst" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove) &
-                echo " $!" >> $src.inmove
+                $(echo "$dt $dst $$" > $src.inmove ; mv $src $dst/$filename.mover ; mv $dst/$filename.mover $dst/$filename ; rm -f $dst/$filename.space ; rm -f $src.inmove) &
                 cd /home/chia/chia-blockchain/
                 . ./activate
                 chia plots add -d "$dst"
